@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Document</title>
+    <style>
+        body{
+            text-align: center;
+            
+        }input{
+            height: 30px;
+            width: 300px;
+            border-radius: 10px;
+            border: 5px solid lightblue;
+            font-size: larger;
+        }
+        button{
+            height: 38px;
+            width: 100px;
+            border-radius: 5px;
+            border: 5px solid skyblue;
+            background-color: skyblue;
+            
+        }
+        button:hover{
+            background-color: blue;
+            color: ghostwhite;
+            border-color: orange;
+            border-radius: 10px;
+        }
+        input:hover{
+            box-shadow: 0 0 10px blue;
+            
+        }
+        #temp{
+            margin-top: 50px;
+
+        }
+        section{
+            margin-top: 100px;
+        }
+        header{
+            margin-top: 150px; 
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <div>
+            <header>
+                <h1>TODO List</h1>
+            </header>
+        </div>
+        <div>
+            <section>
+                <input type="text" id="task" placeholder="Enter Task...">
+                <button id="btn">ADD</button>
+            </section>
+        </div>
+        <div>
+            <div id="temp">
+            
+            </div>
+        </div>
+    </div>
+    <script>
+        
+        let tasktag=document.querySelector("section>#task");
+        let btntag=document.querySelector("section>#btn");
+        let addedtag=document.querySelector("div>#added");
+        let temptag=document.querySelector("div>#temp");
+        let arr=[];
+        let edit_id="";
+        btntag.addEventListener('click',function(){
+            let value=tasktag.value;
+            if(!edit_id)
+            {
+                if(value=="")
+              {
+                alert("Empty value cant be added");
+              }
+              else
+             {
+                let obj={
+                    id:new Date().getMilliseconds(),
+                    text:value
+                }
+                //addedtag.value=value;
+                arr.unshift(obj);
+                tasktag.value="";
+              }
+              wrk();
+            }
+            else
+            {
+                let a=arr.map(function(value){
+                    if(value.id==edit_id)
+                    {
+                        value.text=tasktag.value;
+                        
+                    }
+                    return value;
+                })
+                
+                console.log(a);
+                arr=a;
+                wrk();
+                tasktag.value="";
+                edit_id="";
+            }
+        });    
+        wrk();
+        
+        function wrk()
+        {
+            
+            let wrking=arr.map(function(data){
+                return `<div>
+                <input type="text" id="added" value="${data.text}">
+                <button id="edit" onclick="editing(${data.id})">Edit</button>
+                <button id="del" onclick="dele(${data.id})">del</button>
+            </div>`
+            })
+            //wrking=arr;
+            let wrki=wrking.join("");
+            //console.log(wrking);
+            
+            temptag.innerHTML=wrki;
+        }
+        function dele(id)
+        {
+           let a=arr.filter(function(value){
+                if(value.id!==id){
+                    return id;
+                    
+                }
+           }) 
+           arr=a;
+           wrk();
+           console.log(a);
+        }
+        function editing(id)
+        {
+            let a=arr.find(function(value){
+                if(value.id==id)
+                {
+                    return value;
+                }
+            })
+            //console.log(a);
+            tasktag.value=a.text;
+            edit_id=a.id
+            //console.log(edit_id);
+        }
+
+        
+    </script>
+</body>
+</html>
